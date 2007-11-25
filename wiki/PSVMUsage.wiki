@@ -21,15 +21,14 @@ PSVM must be run on linux environment and it has been fully tested using gcc-4.2
     * Pick one machine as the master and startup mpd(mpi daemon)
       * mpd --daemon --listenport=55555
     * Other machines act as slave and must connect to the master
-      * mpd --daemon -h ServerHostName -p 55555
+      * mpd --daemon -h serverHostName -p 55555
     * Check whether the environment is setup successfully: on master, run "mpdtrace", you will see all the slaves. If no machines show up, you must check your mpi setup and refer to mpich2 user manual.
   * Download PSVM package and extract and run "make" in its directory. You will see two binaries generated svm_train/svm_predict. We use mpich2 buildin compiler mpicxx to compile, it is a wrap of g++.
-  * Prepare datafile:
-    * Our datafile is similar to libsvm. Each line is a data, it is like <label> <index1>:<value1> <index2>:<value2> ...
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Prepare datafile =
+  * Our datafile is similar to libsvm. Data is stored using a sparse representation, with one element per line. Each line begins with an integer, which is the element's label and which must be either -1 or 1. The label is then followed by a list of features, of the form featureID:featureValue. It is like <label> <index1>:<value1> <index2>:<value2> ... We only support binary classification, so the label must be 1/-1. Feature index must be in increasing order.
+  * The testing/validating data format is the same as the training file format. Note in particular that each element must still have a label, although these labels are only used for computing accuracy, precision, and recall statistics. If you don't have labels for the elements, just provide fake labels.
+  * Example: Suppose there are two elements, each with two features. The first one is Feature0: 1, Feature1: 2 and belongs to class 1; The second one is Feature0: 100, Feature1: 200 and belongs to class -1. Then the datafile would look like:
+{{{
+1  0:1    1:2
+-1 0:100  1:200
+}}}
