@@ -36,16 +36,16 @@ PSVM must be run in linux environment with mpich2-1.0.6p1.
   * Download splice.train and splice.pred as training and validating sample
   * Train
     * `mkdir /home/$USER/model/`
-    * `./svm_train -rank_ratio 0.1  -kernel_type 2 -hyper_parm 4  -gamma 0.0625 --model_path=/home/$USER/model/  splice.train`
+    * `./svm_train -rank_ratio 0.1  -kernel_type 2 -hyper_parm 1  -gamma 0.01 --model_path /home/$USER/model/  splice.train`
   * Predict
     * `./svm_predict --model_path /home/$USER/model/  splice.pred`
 {{{
 ========== Predict Accuracy ==========
-Accuracy          : 0.857471
-Positive Precision: 0.836751
-Positive Recall   : 0.901857
-Negative Precision: 0.883891
-Negative Recall   : 0.809387
+Accuracy          : 0.864368
+Positive Precision: 0.875899
+Positive Recall   : 0.861185
+Negative Precision: 0.852305
+Negative Recall   : 0.867816
 }}}
   * You will also see a file named PredictResult generated in the /home/$USER/model/ folder. This file stores the predicted labels compared to the original labels of each testing element.
 = Command-line flags =
