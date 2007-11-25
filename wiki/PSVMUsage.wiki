@@ -1,4 +1,4 @@
-#summary An installation manual for
+#summary An Quick Start Manual for PSVM
 
 = Introduction =
 
@@ -32,3 +32,47 @@ PSVM must be run on linux environment and it has been fully tested using gcc-4.2
 1  0:1    1:2
 -1 0:100  1:200
 }}}
+= Do a simple training and testing =
+  * Download splice.train and splice.pred as training and validating sample
+  * Train
+    * mkdir /home/$USER/model/
+    * ./svm_train -rank_ratio 0.1  -kernel_type 2 -hyper_parm 4  -gamma 0.0625 --model_path=/home/$USER/model/  splice.train
+  * Predict
+    * /svm_predict --model_path /home/$USER/model/  splice.pred
+{{{
+========== Predict Accuracy ==========
+Accuracy          : 0.857471
+Positive Precision: 0.836751
+Positive Recall   : 0.901857
+Negative Precision: 0.883891
+Negative Recall   : 0.809387
+}}}
+  * You will also see a file named PredictResult generated in the /home/$USER/model/ folder. This file stores the predicted labels compared to the original labels of each testing element.
+= Command-line flags =
+  * Training (svm_train) flags
+    * `kernel_type`: 
+      * 0: normalized-linear
+      * 1: normalized-polynomial
+      * 2: RBF Gaussian
+      * 3: Laplasian
+    * `rank_ratio`: approximation ratio between 0 and 1.  Higher values yield higher accuracy at the cost of increased memory usage and training time.  If you are unsure what value to use, we recommend a value of `1/sqrt(n)`, where `n` is the number of training samples.
+    * `hyper_parm`: C in SVM. This is the same as libsvm "-c" parameter
+    * `gamma`: gamma value if you use RBF kernel. This is the same as libsvm "-g" parameter
+    * `poly_degree`: degree if you use normalized-polynomial kernel. This is the same as libsvm "-d" parameter
+    * `model_path`: the location to save the training model and checkpoints to.  Be sure that this path is *EMPTY* before training a new model: svm_train will interpret any of its checkpoints left in this directory as checkpoints for the current model.
+    * =failsafe=: If failsafe is set to true, program will periodically write checkpoints to `model_path` and if program fail, it will restart from last checkpoints.
+    * `save_interval`: Because PSVM supports failsafe. On every `save_interval` seconds, program will write a checkpoint. If PSVM fails such as machine is down, it will restart from last checkpoint on next execution.
+    * `surrogate_gap_threshold`, `feasible_threshold`, `max_iteration`: Because PSVM use Interior Point Method, there needs many iterations. The iteration will stop by checking ((surrogate_gap < `surrogate_gap_threshold` and primal residual < `feasible_threshold` and dual residual < `feasible_threshold`) or iterations > `max_iteration`). Usually setting them to default will handle most of the cases.
+    * `positive_weight`, `negative_weight`: For unbalanced data, we should set a more-than-one weight to one of the class. For example there are 100 positive data and 10 negative data, it is suggested you set negative_weight to 10.
+    * Others: simply run svm_train to get description for each parameter. They are not frequently used unless you are quite familiar with algorithm details.
+  * Predicting (svm_predict) flags
+    * `model_path`: The path of the model which we use to predict.
+    * `output_path`: Where to output `PredictResult`.
+= Run PSVM parallelly =
+  * Firstly, mpich2 must be setup successfully. Type "mpdtrace" on master to check how many machines we have.
+  * Binaries(svm_train, svm_predict) must be located on a shared path that each computer can access(The path name should be the same on all computers). You should also prepare a model path which all machines can access.
+  * On master: run "mpiexec -n numberOfMachines /PATH/svm_train ...."
+    * Simple add "mpiexec -n numberOfMachines" before original command line, then the program will run on parallel machines. (The number of machines specified for execution should not exceed the total number of machines, or two processes will run on a single machine and training time will be limited by this slowest machine.)
+    * After training, model.0, model.1 such things will be generated in the shared model_path
+  * On master: run "mpiexec -n numberOfMachines /PATH/svm_predict ...."
+    * Note: The number of machines used to predict *MUST* be the *SAME* as the number of machines used to train.
