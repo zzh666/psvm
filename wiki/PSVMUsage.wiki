@@ -2,7 +2,7 @@
 
 = Introduction =
 
-PSVM must be run on linux environment with mpich2-1.0.6p1.
+PSVM must be run in linux environment with mpich2-1.0.6p1.
 
 = Installation = 
 
