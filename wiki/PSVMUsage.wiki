@@ -7,12 +7,25 @@ PSVM must be run on linux environment and it has been fully tested using gcc-4.2
 = Installation = 
 
   * Parallel Infrastructure is based on MPI. Firstly mpich2 must be installed before running PSVM. You can download it from http://www.mcs.anl.gov/research/projects/mpich2/.
-    * as
+    * Install mpich2
       * Download mpich2-1.0.6p1.tar.gz
-    * Extract it to a path
-    * ./configure
-    * make
-    * sudo make install
+      * Extract it to a path
+      * ./configure
+      * make
+      * sudo make install
+      * After installing, you will find some binaries and scripts in $PATH. Test by running "mpd" to see if it exists
+    * Create password file ~/.mpd.conf with access mode 600 (rw-------) in home directory. The file should contain a single line "MPD_SECRETWORD=PASSWORD". Because you may have many  machines, you must do this on each machine.
+      * touch ~/.mpd.conf
+      * chmod 600 ~/.mpd.conf
+      * cat "MPD_SECRETWORD=anypassword" > ~/.mpd.conf
+    * Pick one machine as the master and startup mpd(mpi daemon)
+      * mpd --daemon --listenport=55555
+    * Other machines act as slave and must connect to the master
+      * mpd --daemon -h ServerHostName -p 55555
+    * Check whether the environment is setup successfully: on master, run "mpdtrace", you will see all the slaves. If no machines show up, you must check your mpi setup and refer to mpich2 user manual.
+  * Download PSVM package and extract and run "make" in its directory. You will see two binaries generated svm_train/svm_predict. We use mpich2 buildin compiler mpicxx to compile, it is a wrap of g++.
+  * Prepare datafile:
+    * Our datafile is similar to libsvm. Each line is a data, it is like <label> <index1>:<value1> <index2>:<value2> ...
 
 = Details =
 
