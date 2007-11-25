@@ -4,7 +4,7 @@
 
 PSVM must be run on linux environment and it has been fully tested using gcc-4.2.1.
 
-= Installation
+= Installation = 
 
   * Parallel Infrastructure is based on MPI. Firstly mpich2 must be installed before running PSVM. You can download it from http://www.mcs.anl.gov/research/projects/mpich2/.
     * as
