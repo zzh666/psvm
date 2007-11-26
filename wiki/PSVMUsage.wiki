@@ -60,7 +60,7 @@ Negative Recall   : 0.867816
     * `gamma`: gamma value if you use RBF kernel. This is the same as libsvm "-g" parameter
     * `poly_degree`: degree if you use normalized-polynomial kernel. This is the same as libsvm "-d" parameter
     * `model_path`: the location to save the training model and checkpoints to.  Be sure that this path is *EMPTY* before training a new model: svm_train will interpret any of its checkpoints left in this directory as checkpoints for the current model.
-    * =failsafe=: If failsafe is set to true, program will periodically write checkpoints to `model_path` and if program fail, it will restart from last checkpoints.
+    * `failsafe`: If failsafe is set to true, program will periodically write checkpoints to `model_path` and if program fail, it will restart from last checkpoints.
     * `save_interval`: Because PSVM supports failsafe. On every `save_interval` seconds, program will write a checkpoint. If PSVM fails such as machine is down, it will restart from last checkpoint on next execution.
     * `surrogate_gap_threshold`, `feasible_threshold`, `max_iteration`: Because PSVM use Interior Point Method, there needs many iterations. The iteration will stop by checking ((surrogate_gap < `surrogate_gap_threshold` and primal residual < `feasible_threshold` and dual residual < `feasible_threshold`) or iterations > `max_iteration`). Usually setting them to default will handle most of the cases.
     * `positive_weight`, `negative_weight`: For unbalanced data, we should set a more-than-one weight to one of the class. For example there are 100 positive data and 10 negative data, it is suggested you set negative_weight to 10.
