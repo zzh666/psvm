@@ -36,9 +36,9 @@ PSVM must be run in linux environment with mpich2-1.0.6p1.
   * Download [http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/splice splice] and  [http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/splice.t splice.t] as training and validating sample
   * Train
     * `mkdir /home/$USER/model/`
-    * `./svm_train -rank_ratio 0.1  -kernel_type 2 -hyper_parm 1  -gamma 0.01 --model_path /home/$USER/model/  splice`
+    * `./svm_train -rank_ratio 0.1  -kernel_type 2 -hyper_parm 1  -gamma 0.01 -model_path /home/$USER/model/  splice`
   * Predict
-    * `./svm_predict --model_path /home/$USER/model/  splice.t`
+    * `./svm_predict -model_path /home/$USER/model/  splice.t`
 {{{
 ========== Predict Accuracy ==========
 Accuracy          : 0.864368
