@@ -17,7 +17,7 @@ PSVM must be run in linux environment with mpich2-1.0.6p1.
     * Create password file `~/.mpd.conf` with access mode 600 (rw-------) in home directory. The file should contain a single line `MPD_SECRETWORD=PASSWORD`. Because you may have many  machines, you must do this on each machine.
       * `touch ~/.mpd.conf`
       * `chmod 600 ~/.mpd.conf`
-      * `cat "MPD_SECRETWORD=anypassword" > ~/.mpd.conf`
+      * `echo "MPD_SECRETWORD=anypassword" > ~/.mpd.conf`
     * Pick one machine as the master and startup mpd(mpi daemon)
       * `mpd --daemon --listenport=55555`
     * Other machines act as slave and must connect to the master
